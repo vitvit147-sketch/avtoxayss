@@ -1,428 +1,478 @@
-import React, { useState, useEffect } from 'react';
-import {
-  Wrench, 
-  Settings, 
-  Car, 
-  Search, 
-  Droplets, 
-  Zap,
-  Phone, 
-  MapPin, 
-  Clock, 
-  Menu, 
-  X, 
-  ShieldCheck, 
-  CheckCircle2, 
-  MessageCircle,
-  ChevronRight,
-  Flame
-} from 'lucide-react';
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AvtoXaysss - Автосервис в Краснотурьинске</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
 
-// Иконка ВКонтакте (Custom SVG)
-const VkIcon = ({ className }) => (
-  <svg viewBox="0 0 24 24" className={className} fill="currentColor">
-    <path d="M13.162 18.994c.609 0 .858-.406.851-.915-.031-1.917.714-2.949 2.059-1.604 1.488 1.488 1.796 2.519 3.603 2.519h3.2c.808 0 1.126-.26 1.126-.668 0-.863-1.421-2.386-2.625-3.504-1.686-1.543-1.724-1.6-1.011-2.595 1.393-1.92 2.056-2.88 2.056-4.341 0-.677-.32-1.054-1.03-1.054h-3.141c-.587 0-.916.32-1.141.905-.631 1.636-2.091 3.99-3.235 3.99-.33 0-.52-.258-.52-.894v-3.327c0-.62-.162-1.166-1.298-1.166H10.51c-.605 0-.853.336-.853.663 0 .684 1.011.848 1.125 2.766v3.25c0 .888-.344 1.15-.558 1.15-1.082 0-3.111-2.316-4.359-4.88-.335-.688-.672-1.002-1.282-1.002H1.54C.818 6.818.5 7.142.5 7.625c0 .878 1.141 3.522 3.665 6.945 2.478 3.42 5.568 4.424 8.997 4.424z"/>
-  </svg>
-);
-
-export default function App() {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  // Эффект скролла для изменения хедера
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const scrollToSection = (id) => {
-    setMobileMenuOpen(false);
-    const el = document.getElementById(id);
-    if (el) {
-      const y = el.getBoundingClientRect().top + window.pageYOffset - 80;
-      window.scrollTo({ top: y, behavior: 'smooth' });
+  <!-- Настройки Tailwind для совпадения с нашим дизайном -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            accent: '#ff4d6d',
+            accentHover: '#e63e5c'
+          }
+        }
+      }
     }
-  };
+  </script>
 
-  const services = [
-    { 
-      title: 'Диагностика ДВС и КПП', 
-      desc: 'Полная проверка состояния двигателя и коробки передач, включая профессиональную эндоскопию.', 
-      icon: <Search className="w-8 h-8 text-[#ff4d6d]" /> 
-    },
-    { 
-      title: 'Ремонт ходовой части', 
-      desc: 'Диагностика подвески, замена стоек, рычагов, сайлентблоков, проточка тормозных дисков.', 
-      icon: <Car className="w-8 h-8 text-[#ff4d6d]" /> 
-    },
-    { 
-      title: 'Сход-развал', 
-      desc: 'Точная настройка углов установки колес на современном высокоточном оборудовании.', 
-      icon: <Settings className="w-8 h-8 text-[#ff4d6d]" /> 
-    },
-    { 
-      title: 'Тюнинг ДВС и КПП', 
-      desc: 'Доработка двигателей и коробок передач. Изготовление кастомных систем выпуска под заказ.', 
-      icon: <Flame className="w-8 h-8 text-[#ff4d6d]" /> 
-    },
-    { 
-      title: 'Сварочные работы', 
-      desc: 'Качественная сварка любой сложности. Аргон и полуавтомат. Пескоструйная обработка деталей.', 
-      icon: <Zap className="w-8 h-8 text-[#ff4d6d]" /> 
-    },
-    { 
-      title: 'Автомойка и полировка', 
-      desc: 'Бережная мойка, химчистка салона, мойка двигателя и профессиональная полировка кузова.', 
-      icon: <Droplets className="w-8 h-8 text-[#ff4d6d]" /> 
-    },
-  ];
+  <style>
+    /* Плавный скролл при клике на меню */
+    html {
+      scroll-behavior: smooth;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-zinc-950 text-zinc-50 font-sans selection:bg-accent selection:text-white">
 
-  return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-50 font-sans selection:bg-[#ff4d6d] selection:text-white">
+  <!-- HEADER -->
+  <header id="main-header" class="fixed top-0 w-full z-50 transition-all duration-300 bg-transparent py-5">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
       
-      {/* HEADER */}
-      <header 
-        className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-          isScrolled ? 'bg-zinc-950/95 backdrop-blur-md border-b border-zinc-800 py-3 shadow-lg shadow-black/50' : 'bg-transparent py-5'
-        }`}
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
-          
-          {/* Logo */}
-          <div className="flex items-center gap-3 cursor-pointer" onClick={() => scrollToSection('home')}>
-            <div className="relative flex items-center justify-center w-10 h-10 rounded-full bg-zinc-900 border border-zinc-700 shadow-[0_0_15px_rgba(255,77,109,0.2)]">
-              <Wrench className="w-5 h-5 text-white transform -rotate-45" />
-              <Wrench className="w-5 h-5 text-white absolute transform rotate-45" />
-            </div>
-            <span className="text-2xl font-black italic tracking-wider text-[#ff4d6d]">
-              Avto<span className="text-white">Xaysss</span>
-            </span>
+      <!-- Logo -->
+      <div class="flex items-center gap-3 cursor-pointer" onclick="scrollToSection('home')">
+        <div class="relative flex items-center justify-center w-10 h-10 rounded-full bg-zinc-900 border border-zinc-700 shadow-[0_0_15px_rgba(255,77,109,0.2)]">
+          <i data-lucide="wrench" class="w-5 h-5 text-white transform -rotate-45"></i>
+          <i data-lucide="wrench" class="w-5 h-5 text-white absolute transform rotate-45"></i>
+        </div>
+        <span class="text-2xl font-black italic tracking-wider text-accent">
+          Avto<span class="text-white">Xaysss</span>
+        </span>
+      </div>
+
+      <!-- Desktop Nav -->
+      <nav class="hidden md:flex gap-8 items-center">
+        <button onclick="scrollToSection('about')" class="text-sm font-medium text-zinc-300 hover:text-accent transition-colors">О нас</button>
+        <button onclick="scrollToSection('services')" class="text-sm font-medium text-zinc-300 hover:text-accent transition-colors">Услуги</button>
+        <button onclick="scrollToSection('contacts')" class="text-sm font-medium text-zinc-300 hover:text-accent transition-colors">Контакты</button>
+        
+        <div class="flex items-center gap-4 ml-4 pl-4 border-l border-zinc-800">
+          <div class="flex flex-col text-right">
+            <a href="tel:88002006305" class="text-sm font-bold hover:text-accent transition-colors">8 (800) 200-63-05</a>
+            <span class="text-xs text-zinc-500">Бесплатный звонок</span>
           </div>
+          <button onclick="openModal()" class="bg-accent hover:bg-accentHover text-white px-5 py-2.5 rounded-md font-bold text-sm transition-all shadow-[0_0_20px_rgba(255,77,109,0.3)] hover:shadow-[0_0_25px_rgba(255,77,109,0.5)] active:scale-95">
+            Записаться
+          </button>
+        </div>
+      </nav>
 
-          {/* Desktop Nav */}
-          <nav className="hidden md:flex gap-8 items-center">
-            <button onClick={() => scrollToSection('about')} className="text-sm font-medium text-zinc-300 hover:text-[#ff4d6d] transition-colors">О нас</button>
-            <button onClick={() => scrollToSection('services')} className="text-sm font-medium text-zinc-300 hover:text-[#ff4d6d] transition-colors">Услуги</button>
-            <button onClick={() => scrollToSection('contacts')} className="text-sm font-medium text-zinc-300 hover:text-[#ff4d6d] transition-colors">Контакты</button>
-            
-            <div className="flex items-center gap-4 ml-4 pl-4 border-l border-zinc-800">
-              <div className="flex flex-col text-right">
-                <a href="tel:88002006305" className="text-sm font-bold hover:text-[#ff4d6d] transition-colors">8 (800) 200-63-05</a>
-                <span className="text-xs text-zinc-500">Бесплатный звонок</span>
-              </div>
-              <button 
-                onClick={() => setIsModalOpen(true)}
-                className="bg-[#ff4d6d] hover:bg-[#e63e5c] text-white px-5 py-2.5 rounded-md font-bold text-sm transition-all shadow-[0_0_20px_rgba(255,77,109,0.3)] hover:shadow-[0_0_25px_rgba(255,77,109,0.5)] active:scale-95"
-              >
-                Записаться
-              </button>
+      <!-- Mobile Menu Button -->
+      <button class="md:hidden p-2 text-zinc-300 hover:text-white" onclick="toggleMenu()">
+        <i data-lucide="menu" id="icon-menu" class="w-6 h-6"></i>
+        <i data-lucide="x" id="icon-close" class="w-6 h-6 hidden"></i>
+      </button>
+    </div>
+
+    <!-- Mobile Nav Dropdown -->
+    <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 w-full bg-zinc-900 border-b border-zinc-800 py-4 px-4 flex-col gap-4 shadow-xl">
+      <button onclick="scrollToSection('about')" class="text-left text-lg font-medium text-zinc-300">О нас</button>
+      <button onclick="scrollToSection('services')" class="text-left text-lg font-medium text-zinc-300">Услуги</button>
+      <button onclick="scrollToSection('contacts')" class="text-left text-lg font-medium text-zinc-300">Контакты</button>
+      <hr class="border-zinc-800" />
+      <a href="tel:88002006305" class="text-lg font-bold flex items-center gap-2">
+        <i data-lucide="phone" class="w-5 h-5 text-accent"></i> 8 (800) 200-63-05
+      </a>
+      <button onclick="openModal(); toggleMenu();" class="w-full bg-accent text-white px-4 py-3 rounded-md font-bold mt-2">
+        Записаться в сервис
+      </button>
+    </div>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section id="home" class="relative pt-32 pb-20 md:pt-48 md:pb-32 lg:min-h-[90vh] flex items-center">
+    <div class="absolute inset-0 z-0">
+      <img src="https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&q=80" alt="Garage background" class="w-full h-full object-cover" />
+      <div class="absolute inset-0 bg-gradient-to-r from-zinc-950 via-zinc-950/90 to-zinc-950/60"></div>
+      <div class="absolute inset-0 bg-gradient-to-t from-zinc-950 via-transparent to-transparent"></div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
+      <div class="max-w-2xl">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900/80 border border-zinc-800 text-sm font-medium text-zinc-300 mb-6 backdrop-blur-sm">
+          <i data-lucide="map-pin" class="w-4 h-4 text-accent"></i>
+          Краснотурьинск, Паровая ул., 11
+        </div>
+        <h1 class="text-4xl md:text-5xl lg:text-7xl font-black uppercase leading-tight mb-6">
+          Комплексный <br />
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-accent to-rose-400">
+            ремонт авто
+          </span>
+        </h1>
+        <p class="text-lg text-zinc-400 mb-10 leading-relaxed max-w-xl">
+          От компьютерной диагностики и замены масла до сложного ремонта ДВС, КПП и кастомного тюнинга. Ваш автомобиль заслуживает лучшего обслуживания!
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <button onclick="openModal()" class="bg-accent hover:bg-accentHover text-white px-8 py-4 rounded-md font-bold text-lg transition-all flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(255,77,109,0.3)] hover:shadow-[0_0_30px_rgba(255,77,109,0.5)]">
+            Записаться на диагностику
+            <i data-lucide="chevron-right" class="w-5 h-5"></i>
+          </button>
+          <button onclick="scrollToSection('services')" class="bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 hover:border-accent text-white px-8 py-4 rounded-md font-bold text-lg transition-all flex items-center justify-center">
+            Наши услуги
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS STRIP -->
+  <section class="bg-zinc-900 border-y border-zinc-800 relative z-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 divide-x divide-zinc-800/0 md:divide-zinc-800">
+        <div class="text-center md:px-4">
+          <div class="text-3xl font-black text-accent mb-1">4.2</div>
+          <div class="text-sm text-zinc-400">Рейтинг на Картах</div>
+        </div>
+        <div class="text-center md:px-4">
+          <div class="text-3xl font-black text-accent mb-1">100%</div>
+          <div class="text-sm text-zinc-400">Гарантия на работы</div>
+        </div>
+        <div class="text-center md:px-4">
+          <div class="text-3xl font-black text-accent mb-1">Все</div>
+          <div class="text-sm text-zinc-400">Марки автомобилей</div>
+        </div>
+        <div class="text-center md:px-4">
+          <div class="text-3xl font-black text-accent mb-1">Быстро</div>
+          <div class="text-sm text-zinc-400">Запчасти в наличии</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT US SECTION -->
+  <section id="about" class="py-20 md:py-32 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid lg:grid-cols-2 gap-16 items-center">
+        <div>
+          <h2 class="text-3xl md:text-5xl font-black mb-6 uppercase">Почему выбирают <span class="text-accent">AvtoXaysss</span>?</h2>
+          <p class="text-zinc-400 text-lg mb-8 leading-relaxed">
+            Мы ежедневно работаем над тем, чтобы ваш автомобиль был в отличном состоянии. От планового ТО до сложного восстановления после поломок. Наша главная цель — чтобы вы уезжали от нас уверенными в своём автомобиле и с хорошим настроением.
+          </p>
+          
+          <ul class="space-y-4 mb-8">
+            <li class="flex items-start gap-3">
+              <i data-lucide="check-circle-2" class="w-6 h-6 text-accent shrink-0"></i>
+              <span class="text-zinc-300">Современное диагностическое оборудование (эндоскопия)</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <i data-lucide="check-circle-2" class="w-6 h-6 text-accent shrink-0"></i>
+              <span class="text-zinc-300">Специализируемся на ВАЗ, Mazda, BMW, Audi, Корейцах и Китайцах</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <i data-lucide="check-circle-2" class="w-6 h-6 text-accent shrink-0"></i>
+              <span class="text-zinc-300">Честные цены и прозрачный расчет до начала работ</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <i data-lucide="check-circle-2" class="w-6 h-6 text-accent shrink-0"></i>
+              <span class="text-zinc-300">Масла и смазки различных фирм в наличии и под заказ</span>
+            </li>
+          </ul>
+          
+          <div class="flex gap-4 items-center p-4 bg-zinc-900 border border-zinc-800 rounded-lg">
+            <i data-lucide="shield-check" class="w-10 h-10 text-accent"></i>
+            <div>
+              <h4 class="font-bold text-white">Все работы по техрегламенту</h4>
+              <p class="text-sm text-zinc-400">Строго соблюдаем заводские инструкции</p>
             </div>
-          </nav>
+          </div>
+        </div>
+        
+        <div class="relative">
+          <div class="absolute inset-0 bg-accent rounded-2xl transform translate-x-4 translate-y-4 opacity-20"></div>
+          <img src="https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?auto=format&fit=crop&q=80" alt="Mechanic working" class="relative rounded-2xl w-full h-[500px] object-cover border border-zinc-800 z-10" />
+        </div>
+      </div>
+    </div>
+  </section>
 
-          {/* Mobile Menu Button */}
-          <button 
-            className="md:hidden p-2 text-zinc-300 hover:text-white"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          >
-            {mobileMenuOpen ? <X /> : <Menu />}
+  <!-- SERVICES SECTION -->
+  <section id="services" class="py-20 md:py-32 bg-zinc-900/50 border-y border-zinc-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <h2 class="text-3xl md:text-5xl font-black mb-6 uppercase">Наши <span class="text-accent">Услуги</span></h2>
+        <p class="text-zinc-400 text-lg">
+          Мы предоставляем полный спектр услуг по техническому обслуживанию, ремонту и доработке автомобилей любых марок.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Service 1 -->
+        <div class="bg-zinc-900 border border-zinc-800 p-8 rounded-xl hover:border-accent transition-colors group">
+          <div class="bg-zinc-950 w-16 h-16 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+            <i data-lucide="search" class="w-8 h-8 text-accent"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3">Диагностика ДВС и КПП</h3>
+          <p class="text-zinc-400 leading-relaxed mb-6">Полная проверка состояния двигателя и коробки передач, включая профессиональную эндоскопию.</p>
+          <button onclick="openModal()" class="text-accent font-semibold text-sm flex items-center gap-1 hover:gap-2 transition-all">
+            Узнать цену <i data-lucide="chevron-right" class="w-4 h-4"></i>
+          </button>
+        </div>
+        
+        <!-- Service 2 -->
+        <div class="bg-zinc-900 border border-zinc-800 p-8 rounded-xl hover:border-accent transition-colors group">
+          <div class="bg-zinc-950 w-16 h-16 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+            <i data-lucide="car" class="w-8 h-8 text-accent"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3">Ремонт ходовой части</h3>
+          <p class="text-zinc-400 leading-relaxed mb-6">Диагностика подвески, замена стоек, рычагов, сайлентблоков, проточка тормозных дисков.</p>
+          <button onclick="openModal()" class="text-accent font-semibold text-sm flex items-center gap-1 hover:gap-2 transition-all">
+            Узнать цену <i data-lucide="chevron-right" class="w-4 h-4"></i>
           </button>
         </div>
 
-        {/* Mobile Nav Dropdown */}
-        {mobileMenuOpen && (
-          <div className="md:hidden absolute top-full left-0 w-full bg-zinc-900 border-b border-zinc-800 py-4 px-4 flex flex-col gap-4 shadow-xl">
-            <button onClick={() => scrollToSection('about')} className="text-left text-lg font-medium text-zinc-300">О нас</button>
-            <button onClick={() => scrollToSection('services')} className="text-left text-lg font-medium text-zinc-300">Услуги</button>
-            <button onClick={() => scrollToSection('contacts')} className="text-left text-lg font-medium text-zinc-300">Контакты</button>
-            <hr className="border-zinc-800" />
-            <a href="tel:88002006305" className="text-lg font-bold flex items-center gap-2">
-              <Phone className="w-5 h-5 text-[#ff4d6d]" /> 8 (800) 200-63-05
-            </a>
-            <button 
-              onClick={() => { setIsModalOpen(true); setMobileMenuOpen(false); }}
-              className="w-full bg-[#ff4d6d] text-white px-4 py-3 rounded-md font-bold mt-2"
-            >
-              Записаться в сервис
-            </button>
+        <!-- Service 3 -->
+        <div class="bg-zinc-900 border border-zinc-800 p-8 rounded-xl hover:border-accent transition-colors group">
+          <div class="bg-zinc-950 w-16 h-16 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+            <i data-lucide="settings" class="w-8 h-8 text-accent"></i>
           </div>
-        )}
-      </header>
-
-      {/* HERO SECTION */}
-      <section id="home" className="relative pt-32 pb-20 md:pt-48 md:pb-32 lg:min-h-[90vh] flex items-center">
-        <div className="absolute inset-0 z-0">
-          <img 
-            src="https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&q=80" 
-            alt="Garage background" 
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-zinc-950 via-zinc-950/90 to-zinc-950/60"></div>
-          <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-transparent to-transparent"></div>
+          <h3 class="text-xl font-bold mb-3">Сход-развал</h3>
+          <p class="text-zinc-400 leading-relaxed mb-6">Точная настройка углов установки колес на современном высокоточном оборудовании.</p>
+          <button onclick="openModal()" class="text-accent font-semibold text-sm flex items-center gap-1 hover:gap-2 transition-all">
+            Узнать цену <i data-lucide="chevron-right" class="w-4 h-4"></i>
+          </button>
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
-          <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900/80 border border-zinc-800 text-sm font-medium text-zinc-300 mb-6 backdrop-blur-sm">
-              <MapPin className="w-4 h-4 text-[#ff4d6d]" />
-              Краснотурьинск, Паровая ул., 11
-            </div>
-            <h1 className="text-4xl md:text-5xl lg:text-7xl font-black uppercase leading-tight mb-6">
-              Комплексный <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#ff4d6d] to-rose-400">
-                ремонт авто
-              </span>
-            </h1>
-            <p className="text-lg text-zinc-400 mb-10 leading-relaxed max-w-xl">
-              От компьютерной диагностики и замены масла до сложного ремонта ДВС, КПП и кастомного тюнинга. Ваш автомобиль заслуживает лучшего обслуживания!
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <button 
-                onClick={() => setIsModalOpen(true)}
-                className="bg-[#ff4d6d] hover:bg-[#e63e5c] text-white px-8 py-4 rounded-md font-bold text-lg transition-all flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(255,77,109,0.3)] hover:shadow-[0_0_30px_rgba(255,77,109,0.5)]"
-              >
-                Записаться на диагностику
-                <ChevronRight className="w-5 h-5" />
-              </button>
-              <button 
-                onClick={() => scrollToSection('services')}
-                className="bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 hover:border-[#ff4d6d] text-white px-8 py-4 rounded-md font-bold text-lg transition-all flex items-center justify-center"
-              >
-                Наши услуги
-              </button>
-            </div>
+        <!-- Service 4 -->
+        <div class="bg-zinc-900 border border-zinc-800 p-8 rounded-xl hover:border-accent transition-colors group">
+          <div class="bg-zinc-950 w-16 h-16 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+            <i data-lucide="flame" class="w-8 h-8 text-accent"></i>
           </div>
+          <h3 class="text-xl font-bold mb-3">Тюнинг ДВС и КПП</h3>
+          <p class="text-zinc-400 leading-relaxed mb-6">Доработка двигателей и коробок передач. Изготовление кастомных систем выпуска под заказ.</p>
+          <button onclick="openModal()" class="text-accent font-semibold text-sm flex items-center gap-1 hover:gap-2 transition-all">
+            Узнать цену <i data-lucide="chevron-right" class="w-4 h-4"></i>
+          </button>
         </div>
-      </section>
 
-      {/* STATS STRIP */}
-      <section className="bg-zinc-900 border-y border-zinc-800 relative z-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 divide-x divide-zinc-800/0 md:divide-zinc-800">
-            <div className="text-center md:px-4">
-              <div className="text-3xl font-black text-[#ff4d6d] mb-1">4.2</div>
-              <div className="text-sm text-zinc-400">Рейтинг на Картах</div>
-            </div>
-            <div className="text-center md:px-4">
-              <div className="text-3xl font-black text-[#ff4d6d] mb-1">100%</div>
-              <div className="text-sm text-zinc-400">Гарантия на работы</div>
-            </div>
-            <div className="text-center md:px-4">
-              <div className="text-3xl font-black text-[#ff4d6d] mb-1">Все</div>
-              <div className="text-sm text-zinc-400">Марки автомобилей</div>
-            </div>
-            <div className="text-center md:px-4">
-              <div className="text-3xl font-black text-[#ff4d6d] mb-1">Быстро</div>
-              <div className="text-sm text-zinc-400">Запчасти в наличии</div>
-            </div>
+        <!-- Service 5 -->
+        <div class="bg-zinc-900 border border-zinc-800 p-8 rounded-xl hover:border-accent transition-colors group">
+          <div class="bg-zinc-950 w-16 h-16 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+            <i data-lucide="zap" class="w-8 h-8 text-accent"></i>
           </div>
+          <h3 class="text-xl font-bold mb-3">Сварочные работы</h3>
+          <p class="text-zinc-400 leading-relaxed mb-6">Качественная сварка любой сложности. Аргон и полуавтомат. Пескоструйная обработка деталей.</p>
+          <button onclick="openModal()" class="text-accent font-semibold text-sm flex items-center gap-1 hover:gap-2 transition-all">
+            Узнать цену <i data-lucide="chevron-right" class="w-4 h-4"></i>
+          </button>
         </div>
-      </section>
 
-      {/* ABOUT US SECTION */}
-      <section id="about" className="py-20 md:py-32 relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div>
-              <h2 className="text-3xl md:text-5xl font-black mb-6 uppercase">Почему выбирают <span className="text-[#ff4d6d]">AvtoXaysss</span>?</h2>
-              <p className="text-zinc-400 text-lg mb-8 leading-relaxed">
-                Мы ежедневно работаем над тем, чтобы ваш автомобиль был в отличном состоянии. От планового ТО до сложного восстановления после поломок. Наша главная цель — чтобы вы уезжали от нас уверенными в своём автомобиле и с хорошим настроением.
-              </p>
-              
-              <ul className="space-y-4 mb-8">
-                {[
-                  'Современное диагностическое оборудование (эндоскопия)',
-                  'Специализируемся на ВАЗ, Mazda, BMW, Audi, Корейцах и Китайцах',
-                  'Честные цены и прозрачный расчет до начала работ',
-                  'Масла и смазки различных фирм в наличии и под заказ'
-                ].map((item, i) => (
-                  <li key={i} className="flex items-start gap-3">
-                    <CheckCircle2 className="w-6 h-6 text-[#ff4d6d] shrink-0" />
-                    <span className="text-zinc-300">{item}</span>
-                  </li>
-                ))}
-              </ul>
-              
-              <div className="flex gap-4 items-center p-4 bg-zinc-900 border border-zinc-800 rounded-lg">
-                <ShieldCheck className="w-10 h-10 text-[#ff4d6d]" />
-                <div>
-                  <h4 className="font-bold text-white">Все работы по техрегламенту</h4>
-                  <p className="text-sm text-zinc-400">Строго соблюдаем заводские инструкции</p>
-                </div>
-              </div>
-            </div>
-            
-            <div className="relative">
-              <div className="absolute inset-0 bg-[#ff4d6d] rounded-2xl transform translate-x-4 translate-y-4 opacity-20"></div>
-              <img 
-                src="https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?auto=format&fit=crop&q=80" 
-                alt="Mechanic working" 
-                className="relative rounded-2xl w-full h-[500px] object-cover border border-zinc-800 z-10"
-              />
-            </div>
+        <!-- Service 6 -->
+        <div class="bg-zinc-900 border border-zinc-800 p-8 rounded-xl hover:border-accent transition-colors group">
+          <div class="bg-zinc-950 w-16 h-16 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+            <i data-lucide="droplets" class="w-8 h-8 text-accent"></i>
           </div>
+          <h3 class="text-xl font-bold mb-3">Автомойка и полировка</h3>
+          <p class="text-zinc-400 leading-relaxed mb-6">Бережная мойка, химчистка салона, мойка двигателя и профессиональная полировка кузова.</p>
+          <button onclick="openModal()" class="text-accent font-semibold text-sm flex items-center gap-1 hover:gap-2 transition-all">
+            Узнать цену <i data-lucide="chevron-right" class="w-4 h-4"></i>
+          </button>
         </div>
-      </section>
-
-      {/* SERVICES SECTION */}
-      <section id="services" className="py-20 md:py-32 bg-zinc-900/50 border-y border-zinc-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-5xl font-black mb-6 uppercase">Наши <span className="text-[#ff4d6d]">Услуги</span></h2>
-            <p className="text-zinc-400 text-lg">
-              Мы предоставляем полный спектр услуг по техническому обслуживанию, ремонту и доработке автомобилей любых марок.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {services.map((service, index) => (
-              <div key={index} className="bg-zinc-900 border border-zinc-800 p-8 rounded-xl hover:border-[#ff4d6d] transition-colors group">
-                <div className="bg-zinc-950 w-16 h-16 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                  {service.icon}
-                </div>
-                <h3 className="text-xl font-bold mb-3">{service.title}</h3>
-                <p className="text-zinc-400 leading-relaxed mb-6">{service.desc}</p>
-                <button 
-                  onClick={() => setIsModalOpen(true)}
-                  className="text-[#ff4d6d] font-semibold text-sm flex items-center gap-1 hover:gap-2 transition-all"
-                >
-                  Узнать цену <ChevronRight className="w-4 h-4" />
-                </button>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CONTACTS & MAP SECTION */}
-      <section id="contacts" className="py-20 md:py-32">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden">
-            
-            {/* Contact Info */}
-            <div className="p-8 md:p-12 lg:p-16 flex flex-col justify-center">
-              <h2 className="text-3xl md:text-4xl font-black uppercase mb-8">Ждем вас в <span className="text-[#ff4d6d]">Автосервисе</span></h2>
-              
-              <div className="space-y-8">
-                <div className="flex items-start gap-4">
-                  <div className="bg-zinc-800 p-3 rounded-lg">
-                    <MapPin className="w-6 h-6 text-[#ff4d6d]" />
-                  </div>
-                  <div>
-                    <h4 className="text-zinc-500 text-sm font-medium mb-1">Адрес (находимся у автовокзала)</h4>
-                    <p className="text-lg font-bold">г. Краснотурьинск<br/>Паровая улица, 11</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-4">
-                  <div className="bg-zinc-800 p-3 rounded-lg">
-                    <Clock className="w-6 h-6 text-[#ff4d6d]" />
-                  </div>
-                  <div>
-                    <h4 className="text-zinc-500 text-sm font-medium mb-1">Режим работы</h4>
-                    <p className="text-lg font-bold">Пн-Пт: 09:00 - 20:00</p>
-                    <p className="text-lg font-bold">Сб-Вс: 10:00 - 18:00</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-4">
-                  <div className="bg-zinc-800 p-3 rounded-lg">
-                    <Phone className="w-6 h-6 text-[#ff4d6d]" />
-                  </div>
-                  <div>
-                    <h4 className="text-zinc-500 text-sm font-medium mb-1">Телефоны</h4>
-                    <a href="tel:88002006305" className="block text-2xl font-black text-[#ff4d6d] hover:text-[#e63e5c] transition-colors mb-2">
-                      8 (800) 200-63-05
-                    </a>
-                    <a href="https://wa.me/79220385558" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-zinc-300 hover:text-white bg-zinc-800 px-4 py-2 rounded-md transition-colors">
-                      <MessageCircle className="w-4 h-4 text-green-500" />
-                      WhatsApp: +7 922 038-55-58
-                    </a>
-                  </div>
-                </div>
-                
-                <div className="pt-4 border-t border-zinc-800">
-                  <a href="https://vk.com/avtoxaysss" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-[#4C75A3] hover:text-[#5c8bc2] font-bold transition-colors">
-                    <VkIcon className="w-6 h-6" /> Мы ВКонтакте
-                  </a>
-                </div>
-              </div>
-            </div>
-
-            {/* Map */}
-            <div className="h-[400px] lg:h-auto min-h-[400px] w-full bg-zinc-800 relative">
-              <iframe 
-                src="https://yandex.ru/map-widget/v1/?text=Свердловская+область,+Краснотурьинск,+Паровая+улица,+11&z=16" 
-                width="100%" 
-                height="100%" 
-                frameBorder="0" 
-                allowFullScreen="true" 
-                className="absolute inset-0 grayscale contrast-125 opacity-80 hover:grayscale-0 hover:opacity-100 transition-all duration-500"
-                title="Карта проезда AvtoXaysss"
-              ></iframe>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* FOOTER */}
-      <footer className="bg-zinc-950 border-t border-zinc-900 py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <div className="flex items-center gap-2">
-            <Wrench className="w-4 h-4 text-[#ff4d6d]" />
-            <span className="text-xl font-black italic tracking-wider text-[#ff4d6d]">
-              Avto<span className="text-white">Xaysss</span>
-            </span>
-          </div>
-          <p className="text-zinc-500 text-sm text-center md:text-left">
-            © {new Date().getFullYear()} Автосервис AvtoXaysss. Все права защищены.
-          </p>
-        </div>
-      </footer>
-
-      {/* MOCK BOOKING MODAL */}
-      {isModalOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-          <div className="bg-zinc-900 border border-zinc-800 p-8 rounded-2xl w-full max-w-md relative animate-in fade-in zoom-in duration-200">
-            <button 
-              onClick={() => setIsModalOpen(false)}
-              className="absolute top-4 right-4 text-zinc-500 hover:text-white transition-colors"
-            >
-              <X className="w-6 h-6" />
-            </button>
-            <h3 className="text-2xl font-black mb-2">Запись на сервис</h3>
-            <p className="text-zinc-400 mb-6 text-sm">Оставьте номер телефона, и мы перезвоним вам для уточнения деталей и времени.</p>
-            
-            <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); setIsModalOpen(false); alert('Заявка отправлена! (Демо)'); }}>
-              <div>
-                <label className="block text-sm font-medium text-zinc-400 mb-1">Ваше имя</label>
-                <input type="text" required className="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#ff4d6d] focus:ring-1 focus:ring-[#ff4d6d] transition-all" placeholder="Иван" />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-zinc-400 mb-1">Телефон</label>
-                <input type="tel" required className="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#ff4d6d] focus:ring-1 focus:ring-[#ff4d6d] transition-all" placeholder="+7 (999) 000-00-00" />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-zinc-400 mb-1">Что нужно сделать?</label>
-                <select className="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#ff4d6d] focus:ring-1 focus:ring-[#ff4d6d] transition-all">
-                  <option>Диагностика</option>
-                  <option>Ремонт ДВС / КПП</option>
-                  <option>Ходовая часть</option>
-                  <option>Замена масла</option>
-                  <option>Другое</option>
-                </select>
-              </div>
-              <button type="submit" className="w-full bg-[#ff4d6d] hover:bg-[#e63e5c] text-white py-3.5 rounded-lg font-bold mt-4 transition-colors">
-                Жду звонка
-              </button>
-            </form>
-          </div>
-        </div>
-      )}
-
+      </div>
     </div>
-  );
-}
+  </section>
+
+  <!-- CONTACTS & MAP SECTION -->
+  <section id="contacts" class="py-20 md:py-32">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid lg:grid-cols-2 gap-12 bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden">
+        
+        <!-- Contact Info -->
+        <div class="p-8 md:p-12 lg:p-16 flex flex-col justify-center">
+          <h2 class="text-3xl md:text-4xl font-black uppercase mb-8">Ждем вас в <span class="text-accent">Автосервисе</span></h2>
+          
+          <div class="space-y-8">
+            <div class="flex items-start gap-4">
+              <div class="bg-zinc-800 p-3 rounded-lg">
+                <i data-lucide="map-pin" class="w-6 h-6 text-accent"></i>
+              </div>
+              <div>
+                <h4 class="text-zinc-500 text-sm font-medium mb-1">Адрес (находимся у автовокзала)</h4>
+                <p class="text-lg font-bold">г. Краснотурьинск<br/>Паровая улица, 11</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-4">
+              <div class="bg-zinc-800 p-3 rounded-lg">
+                <i data-lucide="clock" class="w-6 h-6 text-accent"></i>
+              </div>
+              <div>
+                <h4 class="text-zinc-500 text-sm font-medium mb-1">Режим работы</h4>
+                <p class="text-lg font-bold">Пн-Пт: 09:00 - 20:00</p>
+                <p class="text-lg font-bold">Сб-Вс: 10:00 - 18:00</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-4">
+              <div class="bg-zinc-800 p-3 rounded-lg">
+                <i data-lucide="phone" class="w-6 h-6 text-accent"></i>
+              </div>
+              <div>
+                <h4 class="text-zinc-500 text-sm font-medium mb-1">Телефоны</h4>
+                <a href="tel:88002006305" class="block text-2xl font-black text-accent hover:text-accentHover transition-colors mb-2">
+                  8 (800) 200-63-05
+                </a>
+                <a href="https://wa.me/79220385558" target="_blank" rel="noreferrer" class="inline-flex items-center gap-2 text-zinc-300 hover:text-white bg-zinc-800 px-4 py-2 rounded-md transition-colors">
+                  <i data-lucide="message-circle" class="w-4 h-4 text-green-500"></i>
+                  WhatsApp: +7 922 038-55-58
+                </a>
+              </div>
+            </div>
+            
+            <div class="pt-4 border-t border-zinc-800">
+              <a href="https://vk.com/avtoxaysss" target="_blank" rel="noreferrer" class="inline-flex items-center gap-2 text-[#4C75A3] hover:text-[#5c8bc2] font-bold transition-colors">
+                <svg viewBox="0 0 24 24" class="w-6 h-6" fill="currentColor">
+                  <path d="M13.162 18.994c.609 0 .858-.406.851-.915-.031-1.917.714-2.949 2.059-1.604 1.488 1.488 1.796 2.519 3.603 2.519h3.2c.808 0 1.126-.26 1.126-.668 0-.863-1.421-2.386-2.625-3.504-1.686-1.543-1.724-1.6-1.011-2.595 1.393-1.92 2.056-2.88 2.056-4.341 0-.677-.32-1.054-1.03-1.054h-3.141c-.587 0-.916.32-1.141.905-.631 1.636-2.091 3.99-3.235 3.99-.33 0-.52-.258-.52-.894v-3.327c0-.62-.162-1.166-1.298-1.166H10.51c-.605 0-.853.336-.853.663 0 .684 1.011.848 1.125 2.766v3.25c0 .888-.344 1.15-.558 1.15-1.082 0-3.111-2.316-4.359-4.88-.335-.688-.672-1.002-1.282-1.002H1.54C.818 6.818.5 7.142.5 7.625c0 .878 1.141 3.522 3.665 6.945 2.478 3.42 5.568 4.424 8.997 4.424z"/>
+                </svg>
+                Мы ВКонтакте
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Map -->
+        <div class="h-[400px] lg:h-auto min-h-[400px] w-full bg-zinc-800 relative">
+          <iframe 
+            src="https://yandex.ru/map-widget/v1/?text=Свердловская+область,+Краснотурьинск,+Паровая+улица,+11&z=16" 
+            width="100%" 
+            height="100%" 
+            frameborder="0" 
+            allowfullscreen="true" 
+            class="absolute inset-0 grayscale contrast-125 opacity-80 hover:grayscale-0 hover:opacity-100 transition-all duration-500"
+            title="Карта проезда AvtoXaysss"
+          ></iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="bg-zinc-950 border-t border-zinc-900 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
+      <div class="flex items-center gap-2">
+        <i data-lucide="wrench" class="w-4 h-4 text-accent"></i>
+        <span class="text-xl font-black italic tracking-wider text-accent">
+          Avto<span class="text-white">Xaysss</span>
+        </span>
+      </div>
+      <p class="text-zinc-500 text-sm text-center md:text-left">
+        © <span id="year"></span> Автосервис AvtoXaysss. Все права защищены.
+      </p>
+    </div>
+  </footer>
+
+  <!-- MOCK BOOKING MODAL -->
+  <div id="booking-modal" class="hidden fixed inset-0 z-[100] items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+    <div class="bg-zinc-900 border border-zinc-800 p-8 rounded-2xl w-full max-w-md relative transition-all">
+      <button onclick="closeModal()" class="absolute top-4 right-4 text-zinc-500 hover:text-white transition-colors">
+        <i data-lucide="x" class="w-6 h-6"></i>
+      </button>
+      <h3 class="text-2xl font-black mb-2">Запись на сервис</h3>
+      <p class="text-zinc-400 mb-6 text-sm">Оставьте номер телефона, и мы перезвоним вам для уточнения деталей и времени.</p>
+      
+      <form class="space-y-4" onsubmit="submitForm(event)">
+        <div>
+          <label class="block text-sm font-medium text-zinc-400 mb-1">Ваше имя</label>
+          <input type="text" required class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all" placeholder="Иван" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-zinc-400 mb-1">Телефон</label>
+          <input type="tel" required class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all" placeholder="+7 (999) 000-00-00" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-zinc-400 mb-1">Что нужно сделать?</label>
+          <select class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all">
+            <option>Диагностика</option>
+            <option>Ремонт ДВС / КПП</option>
+            <option>Ходовая часть</option>
+            <option>Замена масла</option>
+            <option>Другое</option>
+          </select>
+        </div>
+        <button type="submit" class="w-full bg-accent hover:bg-accentHover text-white py-3.5 rounded-lg font-bold mt-4 transition-colors">
+          Жду звонка
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- JS Logic -->
+  <script>
+    // Initialize Lucide Icons
+    lucide.createIcons();
+
+    // Set current year in footer
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Header scroll effect
+    const header = document.getElementById('main-header');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) {
+        header.classList.add('bg-zinc-950/95', 'backdrop-blur-md', 'border-b', 'border-zinc-800', 'py-3', 'shadow-lg', 'shadow-black/50');
+        header.classList.remove('bg-transparent', 'py-5');
+      } else {
+        header.classList.remove('bg-zinc-950/95', 'backdrop-blur-md', 'border-b', 'border-zinc-800', 'py-3', 'shadow-lg', 'shadow-black/50');
+        header.classList.add('bg-transparent', 'py-5');
+      }
+    });
+
+    // Mobile Menu Toggle
+    const mobileMenu = document.getElementById('mobile-menu');
+    const iconMenu = document.getElementById('icon-menu');
+    const iconClose = document.getElementById('icon-close');
+
+    function toggleMenu() {
+      if (mobileMenu.classList.contains('hidden')) {
+        mobileMenu.classList.remove('hidden');
+        mobileMenu.classList.add('flex');
+        iconMenu.classList.add('hidden');
+        iconClose.classList.remove('hidden');
+      } else {
+        mobileMenu.classList.add('hidden');
+        mobileMenu.classList.remove('flex');
+        iconMenu.classList.remove('hidden');
+        iconClose.classList.add('hidden');
+      }
+    }
+
+    // Scroll to section
+    function scrollToSection(id) {
+      if (!mobileMenu.classList.contains('hidden')) {
+        toggleMenu(); // close mobile menu if open
+      }
+      const el = document.getElementById(id);
+      if (el) {
+        const y = el.getBoundingClientRect().top + window.pageYOffset - 80;
+        window.scrollTo({ top: y, behavior: 'smooth' });
+      }
+    }
+
+    // Modal Logic
+    const modal = document.getElementById('booking-modal');
+    
+    function openModal() {
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeModal() {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function submitForm(event) {
+      event.preventDefault();
+      closeModal();
+      alert('Заявка отправлена! Мы скоро свяжемся с вами.');
+    }
+  </script>
+</body>
+</html>
